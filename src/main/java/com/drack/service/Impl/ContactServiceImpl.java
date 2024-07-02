@@ -22,8 +22,11 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Optional<Contact> findById(Long id) {
-        Contact contact = contactRepository.findById(id).orElse(null);
-        return Optional.ofNullable(contact);
+        Optional<Contact> contact = contactRepository.findById(id);
+        if (contact.isEmpty()) {
+            return null;
+        }
+        return contact;
     }
 
     @Override
@@ -33,6 +36,21 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public void deleteById(Long id) {
-        contactRepository.deleteById(id);
+        Optional<Contact> contact = contactRepository.findById(id);
+        if (contact.isPresent()) {
+            contactRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public Contact update(Long id, Contact contact) {
+        Optional<Contact> contactOptional = contactRepository.findById(id);
+        if (contactOptional.isPresent()) {
+            contactOptional.get().setName(contact.getName());
+            contactOptional.get().setPhone(contact.getPhone());
+            contactOptional.get().setEmail(contact.getEmail());
+            return contactRepository.save(contactOptional.get());
+        }
+        return null;
     }
 }

@@ -32,30 +32,22 @@ public class ContactController {
 
     @PostMapping
     public ResponseEntity<Contact> save(@RequestBody Contact contact) {
-        return ResponseEntity.ok(contactService.save(contact));
+        return ResponseEntity.status(201).body(contactService.save(contact));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Contact> update(@PathVariable Long id, @RequestBody Contact contact) {
-        Optional<Contact> contactOptional = contactService.findById(id);
-        if (contactOptional != null) {
-            contactOptional.get().setName(contact.getName());
-            contactOptional.get().setPhone(contact.getPhone());
-            contactOptional.get().setEmail(contact.getEmail());
-
-            return ResponseEntity.ok(contactService.save(contactOptional.get()));
+        Contact contactU = contactService.update(id, contact);
+        if (contactU == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(contactU);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        Optional<Contact> contact = contactService.findById(id);
-        if (contact != null) {
-            contactService.deleteById(id);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+        contactService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 
