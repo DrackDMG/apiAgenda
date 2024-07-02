@@ -39,8 +39,11 @@ public class ContactController {
     public ResponseEntity<Contact> update(@PathVariable Long id, @RequestBody Contact contact) {
         Optional<Contact> contactOptional = contactService.findById(id);
         if (contactOptional != null) {
-            contact.setId(id);
-            return ResponseEntity.ok(contactService.save(contact));
+            contactOptional.get().setName(contact.getName());
+            contactOptional.get().setPhone(contact.getPhone());
+            contactOptional.get().setEmail(contact.getEmail());
+
+            return ResponseEntity.ok(contactService.save(contactOptional.get()));
         }
         return ResponseEntity.notFound().build();
     }
