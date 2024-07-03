@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -31,6 +33,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact save(Contact contact) {
+        contact.setCreatedAt(LocalDateTime.now());
         return contactRepository.save(contact);
     }
 
