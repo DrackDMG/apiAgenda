@@ -1,5 +1,6 @@
 package com.drack.service.Impl;
 
+import com.drack.dto.ContactDto;
 import com.drack.persistence.entities.Contact;
 import com.drack.persistence.repository.ContactRepository;
 import com.drack.service.ContactService;
@@ -32,7 +33,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact save(Contact contact) {
+    public Contact save(ContactDto contactDto) {
+        Contact contact = new Contact();
+        contact.setName(contactDto.getName());
+        contact.setPhone(contactDto.getPhone());
+        contact.setEmail(contactDto.getEmail());
         contact.setCreatedAt(LocalDateTime.now());
         return contactRepository.save(contact);
     }
@@ -46,12 +51,12 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact update(Long id, Contact contact) {
+    public Contact update(Long id, ContactDto contactDto) {
         Optional<Contact> contactOptional = contactRepository.findById(id);
         if (contactOptional.isPresent()) {
-            contactOptional.get().setName(contact.getName());
-            contactOptional.get().setPhone(contact.getPhone());
-            contactOptional.get().setEmail(contact.getEmail());
+            contactOptional.get().setName(contactDto.getName());
+            contactOptional.get().setPhone(contactDto.getPhone());
+            contactOptional.get().setEmail(contactDto.getEmail());
             return contactRepository.save(contactOptional.get());
         }
         return null;

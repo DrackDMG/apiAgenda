@@ -1,5 +1,6 @@
 package com.drack.controller;
 
+import com.drack.dto.ContactDto;
 import com.drack.persistence.entities.Contact;
 import com.drack.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,12 @@ public class ContactController {
     }
 
     @PostMapping
-    public ResponseEntity<Contact> save(@RequestBody Contact contact) {
+    public ResponseEntity<Contact> save(@RequestBody ContactDto contact) {
         return ResponseEntity.status(201).body(contactService.save(contact));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Contact> update(@PathVariable Long id, @RequestBody Contact contact) {
+    public ResponseEntity<Contact> update(@PathVariable Long id, @RequestBody ContactDto contact) {
         Contact contactU = contactService.update(id, contact);
         if (contactU == null) {
             return ResponseEntity.notFound().build();
